@@ -1,0 +1,13 @@
+1. pip install django
+2. django-admin startproject mysite
+3. cd app
+4. python manage.py runserver
+5. python manage.py startapp myapi
+6. python manage.py migrate
+7. python manage.py createsuperuser
+8. Create models
+9. python manage.py makemigrations
+
+###  Django REST Framework
+
+1. pip install djangorestframework
