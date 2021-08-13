@@ -11,7 +11,6 @@ class AddressValidator:
         self.message = message or self.message
 
     def __call__(self, attrs):
-        print('\n'*3,"country" in attrs, '\n'*3)
         message = self.message
         if "zip_code" in attrs and len(str(attrs["zip_code"])) != 5:
             message = 'must contain 5 digits'
@@ -22,7 +21,7 @@ class AddressValidator:
         elif "city" in attrs and  len(attrs["city"]) < 3:
             message = 'must contain more letters'
             self.raize_error(attrs, 'city', message)
-        elif "street" in attrs and  len(re.findall(r'([A-z0-9]+ str\. [A-z0-9]+$)',attrs["street"])) != 1:
+        elif "street" in attrs and  len(re.findall(r'([A-z0-9]+ str\. [^0][A-z0-9]+$)',attrs["street"])) != 1:
             message = 'wrong street format. It must be like: Soborna str. 16'
             self.raize_error(attrs, 'street', message)
         elif "apartament" in attrs and  attrs['apartament'] == 0:

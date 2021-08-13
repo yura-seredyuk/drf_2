@@ -47,10 +47,10 @@ class GetSingleAddressTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 class CreateNewAddressTest(TestCase):
-    """ Test module for inserting a new puppy """
+    """ Test module for inserting a new address """
 
     def setUp(self):
-        self.valid_adrdess = {
+        self.valid_address = {
                 'country':"Ukraine", 'city':"Rivne", 'zip_code': 33026, #
                 'street':"Test_post str. 16", 'apartament':200}
         self.invalid_address = {
@@ -60,7 +60,7 @@ class CreateNewAddressTest(TestCase):
     def test_create_valid_address(self):
         response = client.post(
             '/address/',
-            data=json.dumps(self.valid_adrdess),
+            data=json.dumps(self.valid_address),
             content_type='application/json'
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -80,7 +80,7 @@ class UpdateSingleAddressTest(TestCase):
         self.addr = Address.objects.create(
             country = "Ukraine", city = "Rivne", zip_code = 33026, 
             street = "Test_update str. 16", apartament = 2003)
-        self.valid_address = {"country": "Ukraine","city": "Rivne","zip_code": 33026,"street": "Soborna str. 16","apartament": 201}
+        self.valid_address = {"country": "Ukraine","city": "Rivne","zip_code": 33026,"street": "Soborna str. 16","apartament": 12}
         self.invalid_address = {'country':"", 'city':"Rivne", 'zip_code': 33026,'street':"Test_update str. 16", 'apartament':233}
 
 
@@ -100,19 +100,54 @@ class UpdateSingleAddressTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-class DeleteSinglePuppyTest(TestCase):
-    """ Test module for deleting an existing puppy record """
+# class DeleteSinglePuppyTest(TestCase):
+#     """ Test module for deleting an existing puppy record """
+
+#     def setUp(self):
+#         self.addr = Address.objects.create(
+#             country = "Ukraine", city = "Rivne", zip_code = 33026, 
+#             street = "Soborna str. 16", apartament = 233)
+
+#     def test_valid_delete_address(self):
+#         response = client.delete('/address/1/')
+#         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+#     def test_invalid_delete_address(self):
+#         response = client.delete('/address/2/')
+#         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+# Validation tests
+
+class ValidationUpdateTest(TestCase):
+    """ Test module for updating an existing address record """
 
     def setUp(self):
         self.addr = Address.objects.create(
             country = "Ukraine", city = "Rivne", zip_code = 33026, 
-            street = "Soborna str. 16", apartament = 233)
+            street = "Test_update str. 16", apartament = 2003)
+    
+    def test_invalid_update_country(self):
+        response = client.put('/address/1/',data={"country": "op"},content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        print('\n\t',response.json())
 
-    def test_valid_delete_address(self):
-        response = client.delete('/address/1/')
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+    def test_invalid_update_country(self):
+        response = client.put('/address/1/',data={"city": "op"},content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        print('\n\t',response.json())
 
-    def test_invalid_delete_address(self):
-        response = client.delete('/address/2/')
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    def test_invalid_update_zip_code(self):
+        response = client.put('/address/1/',data={"zip_code": 123},content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        print('\n\t',response.json())
 
+    def test_invalid_update_street(self):
+        response = client.put('/address/1/',data={"street": "Soborna str. 02"},content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        print('\n\t',response.json())
+
+    def test_invalid_update_apartament(self):
+        response = client.put('/address/1/',data={"apartament": 0},content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        print('\n\t',response.json())

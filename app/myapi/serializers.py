@@ -12,12 +12,12 @@ class AddressSerializer(serializers.ModelSerializer):
 
     
     def create(self, validated_data):
-        print("validated_data:",validated_data)
+        # print("validated_data:",validated_data)
         result = Address.objects.create(**validated_data)
         return result
     
     def update(self, instance, validated_data):
-        print(validated_data, validated_data )
+        # print(validated_data, validated_data )
         instance.country = validated_data.get('country', instance.country)
         instance.city = validated_data.get('city', instance.city)
         instance.zip_code = validated_data.get('zip_code', instance.zip_code)
