@@ -5,7 +5,6 @@ from django.urls import reverse
 from .models import Address
 from .serializers import AddressSerializer
 
-# Create your tests here.
 
 # initialize the APIClient app
 client = Client()
@@ -52,7 +51,7 @@ class CreateNewAddressTest(TestCase):
 
     def setUp(self):
         self.valid_adrdess = {
-                'country':"Ukraine", 'city':"Rivne", 'zip_code': 33026, 
+                'country':"Ukraine", 'city':"Rivne", 'zip_code': 33026, #
                 'street':"Test_post str. 16", 'apartament':200}
         self.invalid_address = {
                 'country':"", 'city':"Rivne", 'zip_code': 33026, 
